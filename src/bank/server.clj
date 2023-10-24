@@ -1,38 +1,11 @@
 (ns bank.server
-  (:import [java.math BigDecimal])
   (:require
    [bank.controllers.core :as controllers]
-   [io.pedestal.http.route :as route]
    [io.pedestal.http :as http]
+   [bank.routes :refer [routes]]
    #_[io.pedestal.test :as test]
    [clojure.java.jdbc :as j]
-   [ring.util.response :as ring-resp]
-   [cheshire.core :as json]))
-
-(defn list-users [request]
-  (controllers/list-users request))
-
-(defn health [request]
-  (ring-resp/response "OK!"))
-
-(defn create-user [request]
-  (controllers/create-user request))
-
-(defn delete [request]
-  (controllers/delete-user request))
-
-(defn update-user [request]
-  (controllers/update-user request))
-
-(defn moviments [request]
-  (controllers/moviments request))
-
-(def routes (route/expand-routes #{["/health-check" :get health :route-name :health-check]
-                                   ["/create" :post create-user :route-name :create]
-                                   ["/moviment" :post moviments :route-name :deposit]
-                                   ["/delete" :delete delete :route-name :delete]
-                                   ["/update" :put update-user :route-name :update]
-                                   ["/list" :get list-users :route-name :list]}))
+   [ring.util.response :as ring-resp]))
 
 (def servide-map {::http/routes routes
                   ::http/port 9999
