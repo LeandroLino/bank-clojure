@@ -42,3 +42,14 @@
   (let [headers (:headers request)
         data (domains/get-moviments (get-in headers ["user-id"]))]
     data))
+
+(defn transfer [request]
+  (let [amount (get-in (json/parse-string (slurp (:body request))) ["amount"])
+        from-user-id (:from (:query-params request))
+        to-user-id (:to (:query-params request))
+        from-user (domains/get-user from-user-id)
+        to-user (domains/get-user to-user-id)]
+    (domains/update-user (utils/str->int from-user-id) (assoc from-user :balance (- (:balance from-user) amount)))
+    (let [update-to-user
+          (domains/update-user (utils/str->int to-user-id) (assoc to-user :balance (+ (:balance to-user) amount)))]
+      update-to-user)))

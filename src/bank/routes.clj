@@ -26,10 +26,15 @@
 (defn extract [request]
   (ring-resp/response (controllers/extract request)))
 
+(defn transfer [request]
+  (ring-resp/response (controllers/transfer request)))
+
+
 (def routes (route/expand-routes #{["/health-check" :get health :route-name :health-check]
                                    ["/create" :post create-user :route-name :create]
                                    ["/moviment" :post moviments :route-name :deposit]
                                    ["/extract" :get extract :route-name :extract]
+                                   ["/transfer" :post transfer :route-name :transfer]
                                    ["/delete" :delete delete :route-name :delete]
                                    ["/update" :put update-user :route-name :update]
                                    ["/list" :get list-users :route-name :list]}))
